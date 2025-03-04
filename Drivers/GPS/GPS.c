@@ -104,60 +104,20 @@ int gps_parse_data(void){
 			break;
 		}
 	}
-
-//		printf("calculated checksum: 0x%.2X\n", gps_calculate_checksum());
-//		printf("parsed checksum: 0x%.2X\n", gps_parse_checksum());
-//		printf("NMEA id: %d\n", gps_nmea_id());
-//		printf("%.*s\n", buffer_size, rx_buffer);
-
-
-#ifdef PRINT_BUFFER
-	gps_print_rx_buffer();
-#endif
-
-
-#ifdef PRINT_PARSED_DATA
-	printf("LOC:  %s\n", gps_complete_location_string());
-	printf("TIME: %s\n", gps_complete_time_string(0));
-	printf("DATE: %s\n", gps_complete_date_string());
-#endif
-#ifdef PRINT_COMPLETE_DATA
-	printf("Lat: %f %c\n", gps.latitude, gps.lat_direction);
-	printf("Lon: %f %c\n", gps.longitude, gps.lon_direction);
-	printf("Alt: %f\n", gps.altitude);
-	printf("Geo sep: %f\n", gps.geoid_sep);
-	printf("Time: %f\n", gps.time);
-	printf("Date: %d\n", gps.date);
-	printf("SV: %d\n", gps.satellites_visible);
-	printf("SU: %d\n", gps.satellites_in_use);
-	printf("FIX: %d\n", gps.fix_mode);
-	printf("Quality: %d\n", gps.gps_quality);
-	printf("PDOP: %f\n", gps.pdop);
-	printf("HDOP: %f\n", gps.hdop);
-	printf("VDOP: %f\n", gps.vdop);
-	printf("kts: %f\n", gps.ground_speed_knots);
-	printf("kph: %f\n", gps.ground_speed_kph);
-#endif
 	gps_data_ready_flag = 0;
 	return 1;
 }
 
 void gps_print_rx_buffer(){
-	if(gps_is_data_ready()) {
 		printf("\nRX buffer size: %d\n", buffer_size - 1);
 		printf("%.*s\n\n", buffer_size - 1, rx_buffer);
-	} else {
-		printf("----data_not_ready----\n\n");
-	}
+	} 
 }
 
 #ifdef	PARSE_RMC
 void parse_rmc(void) {
 	char *token;
 	strncpy(nmea_buffer, (char*)rx_buffer, buffer_size);
-#ifdef PRINT_DEBUGGER
-	printf("RMC: %.*s length(%d)\n", buffer_size-2, nmea_buffer, buffer_size);
-#endif
 	token = strtok(nmea_buffer, ",");
 	token = strtok(NULL, ",");
 	if (token) gps.time = (float) atof(token);
@@ -174,16 +134,6 @@ void parse_rmc(void) {
 	if (token) gps.ground_speed_knots = (float) atof(token);
 	token = strtok(NULL, ",");
 	if (token) gps.date = atoi(token);
-#ifdef PRINT_DEBUGGER
-	printf("Time: %f\n", gps.time);
-	printf("Latitude: %f\n", gps.latitude);
-	printf("Lat_dir: %c\n", gps.lat_direction);
-	printf("longitude: %f\n", gps.longitude);
-	printf("Long_dir: %c\n", gps.lon_direction);
-	printf("Speed knots: %f\n", gps.ground_speed_knots);
-	printf("Date: %d\n", gps.date);
-	printf("\n");
-#endif
 }
 #endif
 
@@ -191,9 +141,6 @@ void parse_rmc(void) {
 void parse_vtg(void) {
 	char *token;
 	strncpy(nmea_buffer, (char*)rx_buffer, buffer_size);
-#ifdef PRINT_DEBUGGER
-	printf("VTG: %.*s length(%d)\n", buffer_size-2, nmea_buffer, buffer_size);
-#endif
 	token = strtok(nmea_buffer, ",");
 	token = strtok(NULL, ",,");
 	token = strtok(NULL, ",");
@@ -202,11 +149,6 @@ void parse_vtg(void) {
 	token = strtok(NULL, ",");
 	token = strtok(NULL, ",");
 	if (token) gps.ground_speed_kph = (float) atof(token);
-#ifdef PRINT_DEBUGGER
-	printf("Speed knots: %f\n", gps.ground_speed_knots);
-	printf("Speed km/h: %f\n", gps.ground_speed_kph);
-	printf("\n");
-#endif
 }
 #endif
 
@@ -214,9 +156,6 @@ void parse_vtg(void) {
 void parse_gga(void) {
 	char *token;
 	strncpy(nmea_buffer, (char*)rx_buffer, buffer_size);
-#ifdef PRINT_DEBUGGER
-	printf("GAA: %.*s length(%d)\n", buffer_size-2, nmea_buffer, buffer_size);
-#endif
 	token = strtok(nmea_buffer, ",");
 	token = strtok(NULL, ",");
 	if (token) gps.time = (float) atof(token);
@@ -239,19 +178,6 @@ void parse_gga(void) {
 	token = strtok(NULL, ",");
 	token = strtok(NULL, ",");
 	if (token) gps.geoid_sep = (float) atof(token);
-#ifdef PRINT_DEBUGGER
-	printf("Time: %f\n", gps.time);
-	printf("Latitude: %f\n", gps.latitude);
-	printf("Lat_dir: %c\n", gps.lat_direction);
-	printf("longitude: %f\n", gps.longitude);
-	printf("Long_dir: %c\n", gps.lon_direction);
-	printf("GPS quality: %d\n", gps.gps_quality);
-	printf("satelites_in_use: %d\n", gps.satellites_in_use);
-	printf("Precision (HDOP): %f\n", gps.hdop);
-	printf("Altitude: %f\n", gps.altitude);
-	printf("Geoid separation: %f\n", gps.geoid_sep);
-	printf("\n");
-#endif
 }
 #endif
 
@@ -269,9 +195,6 @@ void parse_gsa(void) {
 			}
 		}
 	}
-#ifdef PRINT_DEBUGGER
-	printf("GSA: %.*s length(%d)\n", buffer_size-2, nmea_buffer, buffer_size);
-#endif
 	token = strtok(nmea_buffer, ",");
 	token = strtok(NULL, ",");
 	token = strtok(NULL, ",");
@@ -282,31 +205,17 @@ void parse_gsa(void) {
 	if (token) gps.hdop = (float) atof(token);
 	token = strtok(NULL, ",");
 	if (token) gps.vdop = (float) atof(token);
-#ifdef PRINT_DEBUGGER
-	printf("Fix mode: %d\n", gps.fix_mode);	//1 - no fix | 2 - 2D | 3 - 3D |
-	printf("PDOP: %f\n", gps.pdop);
-	printf("HDOP: %f\n", gps.hdop);
-	printf("VDOP: %f\n", gps.vdop);
-	printf("\n");
-#endif
 }
 #endif
 #ifdef	PARSE_GSV
 void parse_gsv(void) {
 	char *token;
 	strncpy(nmea_buffer, (char*)rx_buffer, buffer_size);
-#ifdef PRINT_DEBUGGER
-	printf("GSV: %.*s length(%d)\n", buffer_size-2, nmea_buffer, buffer_size);
-#endif
 	token = strtok(nmea_buffer, ",");
 	token = strtok(NULL, ",");
 	token = strtok(NULL, ",");
 	token = strtok(NULL, ",");
 	if (token) gps.satellites_visible = atoi(token);
-#ifdef PRINT_DEBUGGER
-	printf("satellites_visible: %d\n", gps.satellites_visible);
-	printf("\n");
-#endif
 }
 #endif
 
@@ -314,9 +223,6 @@ void parse_gsv(void) {
 void parse_gll(void) {
 	char *token;
 	strncpy(nmea_buffer, (char*)rx_buffer, buffer_size);
-#ifdef PRINT_DEBUGGER
-	printf("GLL: %.*s length(%d)\n", buffer_size-2, nmea_buffer, buffer_size);
-#endif
 	token = strtok(nmea_buffer, ",");
 	token = strtok(NULL, ",");
 	if (token) gps.latitude = (float) atof(token);
@@ -328,14 +234,6 @@ void parse_gll(void) {
 	if (token) gps.lon_direction = token[0];
 	token = strtok(NULL, ",");
 	if (token) gps.time = (float) atof(token);
-#ifdef PRINT_DEBUGGER
-	printf("Latitude: %f\n", gps.latitude);
-	printf("Lat_dir: %c\n", gps.lat_direction);
-	printf("longitude: %f\n", gps.longitude);
-	printf("Long_dir: %c\n", gps.lon_direction);
-	printf("Time: %f\n", gps.time);
-	printf("\n");
-#endif
 }
 #endif
 
@@ -515,14 +413,12 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 			rx_buffer_index = 0;
 		}
 		if(received_byte == '\n'){
-			HAL_GPIO_TogglePin(test_1_GPIO_Port, test_1_Pin);
 			buffer_size = rx_buffer_index;
 			rx_buffer_index = 0;
 			if(gps_validate_data()){
 				gps_data_ready_flag = 1;
-				gps_parse_data();
+				//gps_parse_data();	//parsing inside interrupt
 			}
-			HAL_GPIO_TogglePin(test_1_GPIO_Port, test_1_Pin);
 		}
 		HAL_UART_Receive_IT(GPS_UART, (uint8_t *)&received_byte, 1);
 	}

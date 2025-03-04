@@ -102,25 +102,16 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-
-//	  if(gps_is_data_ready()){
-//		  gps_parse_data();
-//	  }
-
-	  printf("\n---DATA---\n");
-
-	  printf("%s\n", gps_complete_date_string());
-	  printf("%s\n", gps_complete_time_string(1));
-	  printf("%s\n", gps_complete_location_string());
-
-	  printf("Alt: %.2f m\n", gps.altitude);
-	  printf("Geo sep: %.2f m\n", gps.geoid_sep);
-	  printf("Sat Visible: %d\n", gps.satellites_visible);
-	  printf("Sat Used: %d\n", gps.satellites_in_use);
-
-	  HAL_Delay(1000);
-
-
+    if(gps_is_data_ready()){
+      gps_parse_data();
+      printf("%s\n", gps_complete_date_string());
+      printf("%s\n", gps_complete_time_string(1));
+      printf("%s\n", gps_complete_location_string());
+      printf("Alt: %.2f m\n", gps.altitude);
+      printf("Geo sep: %.2f m\n", gps.geoid_sep);
+      printf("Sat Visible: %d\n", gps.satellites_visible);
+      printf("Sat Used: %d\n", gps.satellites_in_use);
+    }
   }
   /* USER CODE END 3 */
 }

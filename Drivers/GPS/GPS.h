@@ -17,14 +17,6 @@
 #define RX_BUFFER_SIZE  128
 
 /*
- * PRINTING SETTINGS
- */
-//#define PRINT_DEBUGGER
-//#define PRINT_BUFFER
-//#define PRINT_PARSED_DATA
-//#define PRINT_COMPLETE_DATA
-
-/*
  * PARSING SETTINGS
  */
 #define PARSE_RMC
