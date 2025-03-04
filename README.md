@@ -1,6 +1,13 @@
 # GPS HAL Driver based on interrupts
 
-How to use:
+### UART SETUP
+
+- 9600 baud
+- 8N1
+- NVIC global interrupt
+
+
+### How to use:
 ```
 #include "GPS.h"
 
