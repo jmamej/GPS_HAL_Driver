@@ -62,6 +62,8 @@ gps_complete_date_string();    - 04/03/2025
 
 gps_complete_time_string(1);    - 14:23:20
 
+To enable printing floating point go to Project -> Properties -> C/C++ Build -> Settings -> MCU/MPU Settings -> check: Use float with printf
+
 Do not delete core functions.
 
 ADITIONAL FUNCTIONS:
