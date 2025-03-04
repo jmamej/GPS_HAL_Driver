@@ -109,9 +109,8 @@ int gps_parse_data(void){
 }
 
 void gps_print_rx_buffer(){
-		printf("\nRX buffer size: %d\n", buffer_size - 1);
-		printf("%.*s\n\n", buffer_size - 1, rx_buffer);
-	} 
+	printf("\nRX buffer size: %d\n", buffer_size - 1);
+	printf("%.*s\n\n", buffer_size - 1, rx_buffer);
 }
 
 #ifdef	PARSE_RMC
